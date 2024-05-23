@@ -17,7 +17,7 @@ def main():
     eroe.inventory += sword + potions
     eroe.gold = 100
     print(f"-{eroe.name} picks up {eroe.gold} Gold")
-    # eroe.equip(sword[0])
+    eroe.equip(sword[0])
     begin(eroe)
     print("-"*60)
 

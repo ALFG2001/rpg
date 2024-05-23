@@ -151,48 +151,38 @@ class Character(): # character
         self.stats = self.stats_base
 
     def attack(self, target):
-        dannoMax = self.stats["STR"]
-        resist = target.stats["CON"]
-        danno = dannoMax - round(resist**0.5) # forse
-        nomeS, nomeT = self.name, target.name
-        print(f"{nomeS} attacks {nomeT} for {danno} damage")
-        target.stats["HP"][0] -= danno
+        damage = max(0, self.stats["STR"] - round(target.stats["CON"] ** 0.5))
+        print(f"{self.name} attacks {target.name} for {damage} damage")
+        self.apply_damage(target, damage)
+
+    def castSpell(self, spell:Spell, target):
+        if self.stats["MANA"][0] < spell.cost:
+            print(f"Not enough mana to cast {spell.name}")
+            return
+
+        self.stats["MANA"][0] -= spell.cost
+        damage = max(0, spell.damage * self.stats["INT"] - round(target.stats["CON"] ** 0.3))
+        print(f"{self.name} casts {spell.name} on {target.name} for {damage} damage")
+        self.apply_damage(target, damage)
+    
+    def apply_damage(self, target, damage):
+        target.stats["HP"][0] -= damage
         if target.stats["HP"][0] <= 0:
             target.stats["HP"][0] = 0
             target.dead = True
-            print("-"*60)
-            print(f"{nomeT} is dead!".center(60))
+            print("-" * 60)
+            print(f"{target.name} is dead!".center(60))
 
-    def castSpell(self, spell:Spell, target):
-            self.stats["MANA"][0] -= spell.cost
-            dannoMax = spell.damage * self.stats["INT"]
-            resist = target.stats["CON"]
-            danno = dannoMax - round(resist**0.3) #forse
-            nomeS, nomeT = self.name, target.name
-            print(f"{nomeS} casts {spell.name} on {nomeT} for {danno} damage")
-            target.stats["HP"][0] -= danno
-            if target.stats["HP"][0] <= 0:
-                target.stats["HP"][0] = 0
-                target.dead = True
-                print("-"*60)
-                print(f"{nomeT} is dead!".center(60))
-    
     def healPotion(self, item:Utility):
         for key in item.stats:
-            diff = 0, ""
             if isinstance(self.stats[key], int):
                 self.stats[key] += item.stats[key]
-                diff = item.stats[key], key
             else:
-                if self.stats[key][0] + item.stats[key] > self.stats[key][1]:
-                     diff = (self.stats[key][1] + item.stats[key]) - (self.stats[key][0] + item.stats[key]), key
-                     self.stats[key][0] =  self.stats[key][1]
-                else:
-                    diff = item.stats[key], key
-                    self.stats[key][0] += item.stats[key]
+                diff = min(self.stats[key][1], self.stats[key][0] + item.stats[key])
+                print(f"{key} increased by {diff-self.stats[key][0]}")
+                self.stats[key][0] =  diff
+                print(f"Current {key}: {self.stats[key][0]}")
                 
-            print(f"{self.name} gained {diff[0]} {diff[1]}")
-        self.inventory.remove(item)
 
     def harmPotion(self, item:Harmful, target):
         danno = item.damage
@@ -213,24 +203,23 @@ class Hero(Character):
         self.stats = {"LEVEL":self.level,
                       "HP":[10,10],
                       "MANA":[5,5], 
-                      "STR":10,
-                      "CON":10, 
-                      "AGI":10,
-                      "INT":10}
+                      "STR":3,
+                      "CON":3, 
+                      "AGI":3,
+                      "INT":3}
         self.stats_base = {"LEVEL":self.level,
                             "HP":[10,10],
                             "MANA":[5,5], 
-                            "STR":10,
-                            "CON":10, 
-                            "AGI":10, 
-                            "INT":10}
+                            "STR":3,
+                            "CON":3, 
+                            "AGI":3, 
+                            "INT":3}
         self.spells = []
         self.inventory = []
         self.hasAttacked = False
         self.dead = False
 
     def levelUp(self):
-        stat_increase = 1.265
         self.level += 1
         i = []
         for item in self.inventory:
@@ -241,10 +230,10 @@ class Hero(Character):
         self.stats = {"LEVEL":self.level,
                     "HP":[10+10*(self.level-1),10+10*(self.level-1)],
                     "MANA":[5+5*(self.level-1),5+5*(self.level-1)], 
-                    "STR":10+round((self.level-1)**stat_increase), 
-                    "CON":10+round((self.level-1)**stat_increase), 
-                    "AGI":10+round((self.level-1)**stat_increase), 
-                    "INT":10+round((self.level-1)**stat_increase)   }
+                    "STR":3+(self.level-1)*2, 
+                    "CON":3+(self.level-1)*1, 
+                    "AGI":3+(self.level-1)*1, 
+                    "INT":3+(self.level-1)*2   }
         self.stats_base = self.stats
         
         for item in i:
@@ -290,7 +279,7 @@ class Slime(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Slime"
-        self.stats = {"HP":[8,8], "MANA":[0,0], "STR":5, "CON":5, "AGI":2, "INT":2}
+        self.stats = {"HP":[8,8], "MANA":[0,0], "STR":3, "CON":2, "AGI":1, "INT":1}
         self.inventory = [SlimeGoo()]
         self.gold = 20
 
@@ -298,7 +287,7 @@ class GoblinHunter(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Goblin Hunter"
-        self.stats = {"HP":[20,20], "MANA":[0,0], "STR":15, "CON":10, "AGI":10, "INT":2}
+        self.stats = {"HP":[15,15], "MANA":[0,0], "STR":4, "CON":3, "AGI":5, "INT":2}
         self.inventory = [GoblinEar()]
         self.gold = 30
 
@@ -306,7 +295,7 @@ class GoblinShaman(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Goblin Shaman"
-        self.stats = {"HP":[15,15], "MANA":[25,25], "STR":5, "CON":5, "AGI":5, "INT":5}
+        self.stats = {"HP":[12,12], "MANA":[15,15], "STR":2, "CON":2, "AGI":3, "INT":5}
         self.inventory = [GoblinEar()]
         self.spells = [FireBolt(), LightingStrike()]
         self.gold = 30
@@ -392,7 +381,7 @@ class EnemyBoss(Character): # enemy boss
 class SlimeKing(EnemyBoss):
     def __init__(self) -> None:
         super().__init__()
-        self.stats = {"NAME":"Slime King","HP":[25,25], "MANA":[5,5], "STR":10, "CON":10, "AGI":5, "INT":2}
+        self.stats = {"NAME":"Slime King","HP":[40,40], "MANA":[5,5], "STR":6, "CON":5, "AGI":2, "INT":2}
         self.spells = [PoisonBall()]
         self.inventory = [SlimeGoo(), SlimeGoo(), SlimeGoo(), SlimeCrown()]
         self.gold = 100
@@ -406,7 +395,7 @@ class SlimeKing(EnemyBoss):
 class GoblinLord(EnemyBoss):
     def __init__(self) -> None:
         super().__init__()
-        self.stats = {"NAME":"Slime King","HP":[30,30], "MANA":[0,0], "STR":20, "CON":20, "AGI":15, "INT":2}
+        self.stats = {"NAME":"Slime King","HP":[50,50], "MANA":[0,0], "STR":8, "CON":6, "AGI":5, "INT":6}
         self.inventory = [GoblinEar(), GoblinEar(), GoblinGem()]
         self.bers = False
         self.gold = 100

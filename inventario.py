@@ -36,7 +36,7 @@ class HealthPotion(Utility):
         super().__init__()
         self.name = "Health Potion"
         self.cost = 10
-        self.stats = {"HP":10}
+        self.stats = {"HP":15}
         self.one_time = True
 
 class ManaPotion(Utility):
@@ -52,21 +52,21 @@ class StrengthPotion(Utility):
         super().__init__()
         self.name = "Strength Potion"
         self.cost = 10
-        self.stats = {"STR":10}
+        self.stats = {"STR":5}
 
 class ConstitutionPotion(Utility):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Constitution Potion"
         self.cost = 10
-        self.stats = {"CON":10}
+        self.stats = {"CON":5}
 
 class IntelligencePotion(Utility):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Intelligence Potion"
         self.cost = 10
-        self.stats = {"INT":10}
+        self.stats = {"INT":5}
 
 class HarmPotion(Harmful):
     def __init__(self) -> None:
@@ -95,9 +95,9 @@ class SlimeCrown(Equipment):
         self.stats = {"HP":[0,0],
                       "MANA":[0,0],
                       "STR":0,
-                      "CON":10, 
+                      "CON":5, 
                       "AGI":0, 
-                      "INT":5}
+                      "INT":2}
         
 class GoblinGem(Equipment):
     def __init__(self) -> None:
@@ -106,8 +106,8 @@ class GoblinGem(Equipment):
         self.cost = 10
         self.stats = {"HP":[10,10],
                       "MANA":[0,0],
-                      "STR":10,
-                      "CON":10, 
+                      "STR":5,
+                      "CON":5, 
                       "AGI":0, 
                       "INT":0}
         
@@ -116,10 +116,10 @@ class HeroSword(Equipment):
         super().__init__()
         self.name = "Hero Sword"
         self.cost = 100
-        self.stats = {"HP":[10,10],
-                      "MANA":[10,10],
-                      "STR":10,
-                      "CON":10, 
-                      "AGI":10, 
-                      "INT":10}
+        self.stats = {"HP":[0,0],
+                      "MANA":[0,0],
+                      "STR":5,
+                      "CON":0, 
+                      "AGI":5, 
+                      "INT":0}
         

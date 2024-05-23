@@ -183,19 +183,19 @@ def spellAttack(hero:Hero, nem:list, numeri_bersaglio:list, order:list):
     else:
         print("NO SPELL UNLOCKED".center(60))
 
-def useItem(hero:Hero, nem:list, numeri_bersaglio:list, order:list):
+def useItem(hero: Hero, nem: list, numeri_bersaglio: list, order: list):
     i = 1
     d_uti = {}
     d_harm = {}
-    # select all item in inventory
+
     for item in hero.inventory:
-        # take only utility items
+        # Take only utility items
         if isinstance(item, Utility):
             if item.name not in d_uti:
                 d_uti[item.name] = [1, [*item.stats], list(item.stats.values())]
             else:
                 d_uti[item.name][0] += 1
-        # take only harmful items
+ 
         if isinstance(item, Harmful):
             if item.name not in d_harm:
                 d_harm[item.name] = [1, item.damage]
@@ -207,95 +207,91 @@ def useItem(hero:Hero, nem:list, numeri_bersaglio:list, order:list):
         for stat in d_uti[k][1]:
             s += f"+{d_uti[k][2][0]} {d_uti[k][1][0]}"
         print(f"{i} - {k} -> {s} - {d_uti[k][0]} left")
-        i += 1        
+        i += 1
+
     for k in d_harm:
         print(f"{i} - {k} -> {d_harm[k][1]} damage - {d_harm[k][0]} left")
         i += 1
-    # select all item in inventory
+
     for item in hero.inventory:
-        # take only equipment items
         if isinstance(item, Equipment):
             listaStats = []
-            # take stats from item
-            for k in item.stats:
-                stat = item.stats[k]
-                # hp/mana case
-                if not isinstance(stat, int):
+            for k, stat in item.stats.items():
+                if isinstance(stat, list):
                     stat = stat[0]
                 if stat > 0:
-                    listaStats.append("+"+str(stat))
-                    listaStats.append(k)
+                    listaStats.append(f"+{stat} {k}")
             if item.equipped:
-                print(f"{i} - {item.name} ->",*listaStats,"- Equipped")
+                print(f"{i} - {item.name} ->", *listaStats, "- Equipped")
             else:
-                print(f"{i} - {item.name} ->",*listaStats,"- Not equipped")
+                print(f"{i} - {item.name} ->", *listaStats, "- Not equipped")
             i += 1
-    # format + select item to equip or unequip
-    selection = [str(x) for x in range(1,i)] + ["0"]
-    selection_str = ""
-    for num in selection[:-1]:
-        selection_str += num + ", "
-    selection_str = selection_str[:-2]
-    stringa = (f"Select item to equip/unequip [{selection_str}]\n0 to go back: ")
+    
+    selection = [str(x) for x in range(1, i)] + ["0"]
+    selection_str = ", ".join(selection[:-1])
+    print("-"*60)
+    stringa = f"Select item to equip/unequip [{selection_str}]\n0 to go back: "
     select = input(stringa)
+    print("-"*60)
     while select not in selection:
         print("Target out of range")
         select = input(stringa)
+    
     if select != "0":
-        # take and sorts utility items
         itemSelectPot = [it for it in hero.inventory if isinstance(it, Utility)]
         sorted_unique_list_U = sortUniqueList(itemSelectPot)
-        # take harmful pots
+
         itemSelectHarm = [it for it in hero.inventory if isinstance(it, Harmful)]
         sorted_unique_list_H = sortUniqueList(itemSelectHarm)
-        # take equipment items 
+
         itemSelectEquip = [it for it in hero.inventory if isinstance(it, Equipment)]
         itemSelect = sorted_unique_list_U + sorted_unique_list_H + itemSelectEquip
-        # select item
-        itemSelect = itemSelect[int(select)-1]
+
+        itemSelect = itemSelect[int(select) - 1]
+        
         if isinstance(itemSelect, Equipment):
             if not itemSelect.equipped:
                 print(f"Equipped {itemSelect.name}")
             else:
                 print(f"Put {itemSelect.name} back in the inventory")
             hero.equip(itemSelect)
-        if isinstance(itemSelect, Utility):
+        
+        elif isinstance(itemSelect, Utility):
             print(f"{hero.name} drank 1 {itemSelect.name}")
             if not itemSelect.one_time:
                 print(f"{itemSelect.name} will last until the end of the encounter")
             hero.healPotion(itemSelect)
             hero.hasAttacked = True
-        if isinstance(itemSelect, Harmful):
-            print("-"*60)
+        
+        elif isinstance(itemSelect, Harmful):
+            print("-" * 60)
             for n in range(len(nem)):
-                nem[n].printStats(n+1, 1)
-                print("-"*60)
-            # scegli il bersagli + check
+                nem[n].printStats(n + 1, 1)
+                print("-" * 60)
             bersaglio = input(f"Which enemy will you use {itemSelect.name} on {[int(x) for x in numeri_bersaglio[:-1]]}\n0 to go back: ")
             while bersaglio not in numeri_bersaglio:
                 print("Target out of range")
                 bersaglio = input(f"Which enemy will you use {itemSelect.name} on {[int(x) for x in numeri_bersaglio[:-1]]}\n0 to go back: ")
             if bersaglio != "0":
                 bersaglio = int(bersaglio)
-                print("-"*60)
-                hero.harmPotion(itemSelect, nem[bersaglio-1])
-                if checkBoss(nem[bersaglio-1]):
-                    boss = nem[bersaglio-1]
+                print("-" * 60)
+                hero.harmPotion(itemSelect, nem[bersaglio - 1])
+                if checkBoss(nem[bersaglio - 1]):
+                    boss = nem[bersaglio - 1]
                     b = kindOfBoss(boss)
                     bossPassive(b, boss, nem)
                     for nemici in nem:
                         if nemici not in order:
                             order.append(nemici)
-                    agi = "AGI"
-                    order = sorted(order, key=lambda character: character.stats[agi], reverse=True)
-                elif nem[bersaglio-1].dead:
+                    order = sorted(order, key=lambda character: character.stats["AGI"], reverse=True)
+                elif nem[bersaglio - 1].dead:
                     checkDead(nem)
                 hero.hasAttacked = True
             else:
-                print("-"*60)
+                print("-" * 60)
                 print("GOING BACK".center(60))
     else:
-        print("-"*60)
+        print("-" * 60)
         print("GOING BACK".center(60))
 
 def turnoEroe(hero:Hero, nem:list, order:list):
