@@ -76,4 +76,6 @@ def begin(hero:Hero):
     else:
         print("YOU LOSE!".center(60))
         print("-"*60)
-    _ = input("PLAY AGAIN?")
+    again = input("PLAY AGAIN? [Y/N]")
+    return again
+

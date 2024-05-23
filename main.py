@@ -18,7 +18,9 @@ def main():
     eroe.gold = 100
     print(f"-{eroe.name} picks up {eroe.gold} Gold")
     eroe.equip(sword[0])
-    begin(eroe)
+    again = begin(eroe)
     print("-"*60)
+    if again in "Yy":
+        main()
 
 main()
