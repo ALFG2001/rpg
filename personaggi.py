@@ -96,26 +96,6 @@ def summonEnemies(numeroStage:int, quanti:int, boss:bool) -> list:
         print(f"{n.name} appears!")
     return nemici
 
-def checkDead(lista:list) -> list:
-    for p in lista:
-        if p.dead:
-            lista.pop(lista.index(p))
-    return lista
-
-def checkItem(item:Item):
-    print(f"{item.name}:")
-    print(f"COSTO: {item.cost}")
-    if isinstance(item, Equipment):
-        for stat in item.stats:
-            if item.stats[stat]:
-                print(f"{stat}: +{item.stats[stat]}")
-
-def checkSpell(spell:Spell, caster):
-    print(f"{spell.name}:")
-    print(f"COST: {spell.cost}")
-    int = "INT"
-    print(f"DAMAGE: {spell.damage*caster.stats[int]}")
-
 class Character(): # character
     def __init__(self) -> None:
         self.name = ""

@@ -3,6 +3,26 @@ from magia import *
 from inventario import *
 from collections import Counter
 
+def checkDead(lista:list) -> list:
+    for p in lista:
+        if p.dead:
+            lista.pop(lista.index(p))
+    return lista
+
+def checkItem(item:Item):
+    print(f"{item.name}:")
+    print(f"COSTO: {item.cost}")
+    if isinstance(item, Equipment):
+        for stat in item.stats:
+            if item.stats[stat]:
+                print(f"{stat}: +{item.stats[stat]}")
+
+def checkSpell(spell:Spell, caster):
+    print(f"{spell.name}:")
+    print(f"COST: {spell.cost}")
+    int = "INT"
+    print(f"DAMAGE: {spell.damage*caster.stats[int]}")
+
 def checkBoss(nemico:Character) -> bool:
     if isinstance(nemico, EnemyBoss):
         return True
@@ -232,7 +252,7 @@ def useItem(hero: Hero, nem: list, numeri_bersaglio: list, order: list):
     print("-"*60)
     stringa = f"Select item to equip/unequip [{selection_str}]\n0 to go back: "
     select = input(stringa)
-    print("-"*60)
+    
     while select not in selection:
         print("Target out of range")
         select = input(stringa)
