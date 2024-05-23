@@ -382,10 +382,9 @@ def turnoNemico(hero:Hero, persona:Character):
             else:
                 #se non ha spell attacca
                 persona.attack(hero)
-        if not hero.dead:
-            print("-"*60)
-            _ = input("Press Enter to continue".center(60))
-            print("-"*60)
+    print("-"*60)
+    _ = input("Press Enter to continue".center(60))
+    print("-"*60)
 
 def buy(hero:Hero,shop:list, shopOG:list ,item_class, quanti:int):
     # takes item from the shop and adds it to the inventory while removing the price from the hero

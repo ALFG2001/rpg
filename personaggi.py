@@ -159,6 +159,7 @@ class Character(): # character
                 self.stats[key] += item.stats[key]
             else:
                 diff = min(self.stats[key][1], self.stats[key][0] + item.stats[key])
+                print("-"*60)
                 print(f"{key} increased by {diff-self.stats[key][0]}")
                 self.stats[key][0] =  diff
                 print(f"Current {key}: {self.stats[key][0]}")
