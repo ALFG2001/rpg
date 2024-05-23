@@ -31,3 +31,17 @@ class LightingStrike(Spell):
         self.name = "lighting Strike"
         self.cost = 15
         self.damage = 3
+
+class HealingLight(Spell):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Healing Light"
+        self.cost = 8
+        self.damage = -4  # Negative damage indicates healing
+
+class HealingWave(Spell):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Healing Wave"
+        self.cost = 15
+        self.damage = -8  # Negative damage indicates healing

@@ -33,9 +33,9 @@ def kindOfBoss(boss:EnemyBoss) -> int:
         return 1
     if isinstance(boss, GoblinLord):
         return 2
-    """
     if isinstance(boss, KoboldHighShaman):
         return 3
+    """
     if isinstance(boss, OrcWarlord):
         return 4
     if isinstance(boss, DemonPrince):
@@ -49,23 +49,26 @@ def kindOfBoss(boss:EnemyBoss) -> int:
 def bossPassive(i:int, boss:EnemyBoss, args:list):
     match i:    #PASSIVE BOSS
         case 1:
-            list = args
             if boss.dead:
                 print()
                 print("THE SLIME KING IS DIVIDING ITSELF".center(60))
                 print("-"*60)
-                ind = list.index(boss)
-                boss.divideSlime(list, ind)
-            checkDead(list)
+                ind = args.index(boss)
+                boss.divideSlime(args, ind)
+            checkDead(args)
         case 2:
-            list = args
-            if boss.dead:
+            if boss.dead and not boss.bers:
                 print()
                 print("THE GOBLIN LORD IS GOING BERSERKER".center(60))
                 print("-"*60)
                 boss.berserker()
-            checkDead(list)
-            
+            checkDead(args)
+        case 3:
+            print()
+            print("THE KOBOLD HIGH SHAMAN USES NECROMANCY".center(60))
+            print("-"*60)
+            boss.reviveAllies(args)
+            checkDead(args)
 def checkHero(eroe:Character) -> bool:
     if isinstance(eroe, Hero):
         return True
@@ -382,9 +385,9 @@ def turnoNemico(hero:Hero, persona:Character):
             else:
                 #se non ha spell attacca
                 persona.attack(hero)
-    print("-"*60)
-    _ = input("Press Enter to continue".center(60))
-    print("-"*60)
+            print("-"*60)
+            _ = input("Press Enter to continue".center(60))
+            print("-"*60)
 
 def buy(hero:Hero,shop:list, shopOG:list ,item_class, quanti:int):
     # takes item from the shop and adds it to the inventory while removing the price from the hero

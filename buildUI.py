@@ -4,10 +4,11 @@ from inventario import *
 from functions import *
 
 def begin(hero:Hero):
+    lvlMax = 3
     END = False
     while not hero.dead and not END:        
         # livelli da 1 a 7
-        for livello in range(1,3):
+        for livello in range(1,lvlMax+1):
             # ultimo encounter dello stage = boss fight
             boss = False
             print(f"STAGE {livello}".center(60, "-"))
@@ -43,6 +44,7 @@ def begin(hero:Hero):
                     for persona in orderOfAction:
                         if not isinstance(persona, Hero):
                             if persona.dead:
+                                print(f"Dropped by {persona.name}")
                                 print(f"1 - {persona.gold} Gold")
                                 dropped = persona.dropItems()
                                 hero.inventory += dropped
@@ -53,7 +55,7 @@ def begin(hero:Hero):
                 else:
                     break
             if not hero.dead:
-                if livello < 2: # dovrà essere 7
+                if livello < lvlMax: # dovrà essere 7
                     if livello > 1:
                         shop = createShop(livello, shop)
                     else:
@@ -76,7 +78,7 @@ def begin(hero:Hero):
             if not END:
                 hero.printStats()
             print("-"*60)
-            if livello > 1: # deve diventare 6
+            if livello > lvlMax-1: # deve diventare 6
                 END = True
                 
     if not hero.dead:
@@ -84,6 +86,6 @@ def begin(hero:Hero):
     else:
         print("YOU LOSE!".center(60))
     print("-"*60)
-    again = input("PLAY AGAIN? [Y/N]")
+    again = input("PLAY AGAIN? [Y/N]: ")
     return again
 
