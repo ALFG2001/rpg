@@ -69,6 +69,15 @@ def bossPassive(i:int, boss:EnemyBoss, args:list):
             print("-"*60)
             boss.reviveAllies(args)
             checkDead(args)
+        case 4:
+            pass
+        case 5:
+            pass
+        case 6:
+            pass
+        case 7:
+            pass
+        
 def checkHero(eroe:Character) -> bool:
     if isinstance(eroe, Hero):
         return True
@@ -168,35 +177,41 @@ def spellAttack(hero:Hero, nem:list, numeri_bersaglio:list, order:list):
             # controlla mana disponibile
             if hero.stats["MANA"][0] >= listaSpell[select_spell-1].cost:
                 print("POSSIBLE TARGETS")
-                # stampa bersaglio + selezione
-                for n in range(len(nem)):
-                    nem[n].printStats(n+1, 1)
-                    print("-"*60)
-                bersaglio = input(f"Which enemy will you cast {listaSpell[select_spell-1].name} on {[int(x) for x in numeri_bersaglio[:-1]]}\n0 to go back: ")
-                while bersaglio not in numeri_bersaglio:
-                    print("Target out of range")
+                if isinstance(listaSpell[select_spell-1], Damaging):
+                    # stampa bersaglio + selezione
+                    for n in range(len(nem)):
+                        nem[n].printStats(n+1, 1)
+                        print("-"*60)
                     bersaglio = input(f"Which enemy will you cast {listaSpell[select_spell-1].name} on {[int(x) for x in numeri_bersaglio[:-1]]}\n0 to go back: ")
-                if bersaglio != "0":
-                    bersaglio = int(bersaglio)
-                    print("-"*60)
-                    # cast spell
-                    hero.castSpell(listaSpell[select_spell-1], nem[bersaglio-1])
-                    # attiva passiva boss
-                    if checkBoss(nem[bersaglio-1]):
-                        boss = nem[bersaglio-1]
-                        b = kindOfBoss(boss)
-                        bossPassive(b, boss, nem)
-                        for nemici in nem:
-                            if nemici not in order:
-                                order.append(nemici)
-                        agi = "AGI"
-                        order = sorted(order, key=lambda character: character.stats[agi], reverse=True)
-                    elif nem[bersaglio-1].dead:
-                        checkDead(nem)
-                    hero.hasAttacked = True
-                else:
-                    print("-"*60)
-                    print("GOING BACK".center(60))
+                    while bersaglio not in numeri_bersaglio:
+                        print("Target out of range")
+                        bersaglio = input(f"Which enemy will you cast {listaSpell[select_spell-1].name} on {[int(x) for x in numeri_bersaglio[:-1]]}\n0 to go back: ")
+                    if bersaglio != "0":
+                        bersaglio = int(bersaglio)
+                        print("-"*60)
+                        # cast spell
+                        hero.castSpell(listaSpell[select_spell-1], nem[bersaglio-1])
+                        # attiva passiva boss
+                        if checkBoss(nem[bersaglio-1]):
+                            boss = nem[bersaglio-1]
+                            b = kindOfBoss(boss)
+                            bossPassive(b, boss, nem)
+                            for nemici in nem:
+                                if nemici not in order:
+                                    order.append(nemici)
+                            agi = "AGI"
+                            order = sorted(order, key=lambda character: character.stats[agi], reverse=True)
+                        elif nem[bersaglio-1].dead:
+                            checkDead(nem)
+                        
+                    else:
+                        print("-"*60)
+                        print("GOING BACK".center(60))
+                elif isinstance(listaSpell[select_spell-1], Healing):
+                    bersaglio = input(f"Will you cast {listaSpell[select_spell-1].name} on yourself?\n1 to cast\n0 to go back: ")
+                    if bersaglio != "0":
+                        hero.castSpell(listaSpell[select_spell-1], hero)
+                hero.hasAttacked = True
             else:
                 print("NOT ENOUGH MANA".center(60))
                 print("-"*60)
@@ -363,19 +378,28 @@ def turnoEroe(hero:Hero, nem:list, order:list):
         _ = input("Press Enter to continue".center(60))
         print("-"*60)
 
-def turnoNemico(hero:Hero, persona:Character):
+def turnoNemico(hero:Hero, persona:Character, nem:list):
     if not persona.dead:
         if not hero.dead:
             if persona.spells:
                 # gets all enemy spells sorted by damage
-                availableSpells = sorted(persona.spells, key=lambda sp: sp.damage, reverse=True)
+                healing_spells = [spell for spell in persona.spells if isinstance(spell, Healing)]
+                damaging_spells = [spell for spell in persona.spells if isinstance(spell, Damaging)]
+                healing_spells.sort(key=lambda spell: spell.heal, reverse=True)
+                damaging_spells.sort(key=lambda spell: spell.damage, reverse=True)
+                availableSpells = healing_spells+damaging_spells
                 availableMana = persona.stats["MANA"][0]
                 i = 0
                 casted = False
                 # casta prima spell con costo abbastanza basso disponibile
                 while not casted and i < len(availableSpells):
                     if availableMana >= availableSpells[i].cost:
-                        persona.castSpell(availableSpells[i], hero)
+                        if isinstance(availableSpells[i], Healing):
+                            sortNem = sorted(nem, key=lambda enemy:enemy.stats["HP"][1]-enemy.stats["HP"][0], reverse=True)
+                            if  sortNem[0].stats["HP"][1]-sortNem[0].stats["HP"][0] >= availableSpells[i].heal:
+                                    persona.castSpell(availableSpells[i], sortNem[0])
+                        else:
+                            persona.castSpell(availableSpells[i], hero)
                         casted = True
                     else:
                         i += 1

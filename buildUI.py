@@ -36,7 +36,7 @@ def begin(hero:Hero):
                         else:
                             # turno nemici
                             if not hero.dead:
-                                turnoNemico(hero, persona)                            
+                                turnoNemico(hero, persona, nem)                            
                             
                 if not hero.dead:
                     print("DROPS")

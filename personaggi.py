@@ -50,9 +50,15 @@ class Character(): # character
             return
 
         self.stats["MANA"][0] -= spell.cost
-        damage = max(0, spell.damage * self.stats["INT"] - round(target.stats["CON"] ** 0.3))
-        print(f"{self.name} casts {spell.name} on {target.name} for {damage} damage")
-        self.apply_damage(target, damage)
+        if isinstance(spell, Damaging):
+            damage = max(0, spell.damage * self.stats["INT"] - round(target.stats["CON"] ** 0.3))
+            print(f"{self.name} casts {spell.name} on {target.name} for {damage} damage")
+            self.apply_damage(target, damage)
+
+        elif isinstance(spell, Healing):
+            heal = spell.heal + self.stats["INT"]
+            self.apply_healing(target, heal)
+            
     
     def apply_damage(self, target, damage):
         target.stats["HP"][0] -= damage
@@ -61,6 +67,14 @@ class Character(): # character
             target.dead = True
             print("-" * 60)
             print(f"{target.name} is dead!".center(60))
+
+    def apply_healing(self, target, heal):
+        if target.stats["HP"][0] + heal > target.stats["HP"][1]:
+            heal = target.stats["HP"][1] - target.stats["HP"][0] 
+            target.stats["HP"][0] = target.stats["HP"][1] 
+        else:
+            target.stats["HP"][0] += heal
+        print(f"{self.name} heals {target.name} for {heal} HP")
 
     def healPotion(self, item:Utility):
         for key in item.stats:
@@ -123,14 +137,14 @@ class Hero(Character):
         self.level = 1
         self.name = "Hero"
         self.stats = {"LEVEL":self.level,
-                      "HP":[10,10],
+                      "HP":[20,20],
                       "MANA":[5,5], 
                       "STR":3,
                       "CON":3, 
                       "AGI":3,
                       "INT":3}
         self.stats_base = {"LEVEL":self.level,
-                            "HP":[10,10],
+                            "HP":[20,20],
                             "MANA":[5,5], 
                             "STR":3,
                             "CON":3, 
@@ -150,7 +164,7 @@ class Hero(Character):
                     i.append(item)
                     self.equip(item)
         self.stats = {"LEVEL":self.level,
-                    "HP":[10+10*(self.level-1),10+10*(self.level-1)],
+                    "HP":[20+10*(self.level-1),20+10*(self.level-1)],
                     "MANA":[5+5*(self.level-1),5+5*(self.level-1)], 
                     "STR":3+(self.level-1)*2, 
                     "CON":3+(self.level-1)*1, 
