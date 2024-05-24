@@ -6,6 +6,8 @@ def main():
     print("-"*60)
     eroe = Hero()
     eroe.name = input("Who are you: ").capitalize()
+    if not eroe.name:
+        eroe.name = "The Hero"
     sword = [HeroSword()]
     print(f"-{eroe.name} picks up the {sword[0].name}")
     potions = [HealthPotion(),HealthPotion(),HealthPotion(),
