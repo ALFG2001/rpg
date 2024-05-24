@@ -299,7 +299,6 @@ def useItem(hero: Hero, nem: list, numeri_bersaglio: list, order: list):
             if not itemSelect.one_time:
                 print(f"{itemSelect.name} will last until the end of the encounter")
             hero.healPotion(itemSelect)
-            hero.hasAttacked = True
         
         elif isinstance(itemSelect, Harmful):
             print("-" * 60)

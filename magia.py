@@ -3,7 +3,6 @@ class Spell():
         self.name = ""
         self.cost = 0
         
-
 class Damaging(Spell):
     def __init__(self) -> None:
         super().__init__()

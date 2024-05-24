@@ -58,8 +58,7 @@ class Character(): # character
         elif isinstance(spell, Healing):
             heal = spell.heal + self.stats["INT"]
             self.apply_healing(target, heal)
-            
-    
+              
     def apply_damage(self, target, damage):
         target.stats["HP"][0] -= damage
         if target.stats["HP"][0] <= 0:
@@ -75,6 +74,7 @@ class Character(): # character
         else:
             target.stats["HP"][0] += heal
         print(f"{self.name} heals {target.name} for {heal} HP")
+        print(f"Current HP: {self.stats["HP"][0]}")
 
     def healPotion(self, item:Utility):
         for key in item.stats:
@@ -87,7 +87,6 @@ class Character(): # character
                 self.stats[key][0] =  diff
                 print(f"Current {key}: {self.stats[key][0]}")
                 
-
     def harmPotion(self, item:Harmful, target):
         danno = item.damage
         print(f"{self.name} uses {item.name} on {target.name} for {danno} damage")
@@ -186,7 +185,6 @@ class Hero(Character):
                 print("-"*60)
                            
 class EnemyMob(Character): # enemy non boss
-    
     def __init__(self) -> None:
         super().__init__()
     
@@ -205,7 +203,7 @@ class GoblinHunter(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Goblin Hunter"
-        self.stats = {"HP":[15,15], "MANA":[0,0], "STR":4, "CON":3, "AGI":5, "INT":2}
+        self.stats = {"HP":[15,15], "MANA":[0,0], "STR":6, "CON":5, "AGI":6, "INT":2}
         self.inventory = [GoblinEar()]
         self.gold = 30
 
@@ -213,7 +211,7 @@ class GoblinShaman(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Goblin Shaman"
-        self.stats = {"HP":[12,12], "MANA":[15,15], "STR":2, "CON":2, "AGI":3, "INT":5}
+        self.stats = {"HP":[12,12], "MANA":[15,15], "STR":2, "CON":4, "AGI":3, "INT":5}
         self.inventory = [GoblinEar()]
         self.spells = [FireBolt(), LightingStrike()]
         self.gold = 30
@@ -326,7 +324,7 @@ class SlimeKing(EnemyBoss):
 class GoblinLord(EnemyBoss):
     def __init__(self) -> None:
         super().__init__()
-        self.stats = {"NAME":"Slime King","HP":[50,50], "MANA":[0,0], "STR":5, "CON":4, "AGI":5, "INT":6}
+        self.stats = {"NAME":"Slime King","HP":[50,50], "MANA":[0,0], "STR":6, "CON":4, "AGI":5, "INT":6}
         self.inventory = [GoblinEar(), GoblinEar(), GoblinRing()]
         self.bers = False
         self.gold = 100
