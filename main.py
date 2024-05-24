@@ -10,7 +10,7 @@ def main():
     print(f"-{eroe.name} picks up the {sword[0].name}")
     potions = [HealthPotion(),HealthPotion(),HealthPotion(),
                ManaPotion(),ManaPotion(),ManaPotion(),
-               HarmPotion(),HarmPotion()]
+               HarmPotion(),HarmPotion(), HeroSword()]
     object_counts = Counter(obj.name for obj in potions)
     for name, count in object_counts.items():
         print(f"-{eroe.name} picks up {count} {name}")

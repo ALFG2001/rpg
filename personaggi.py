@@ -87,10 +87,11 @@ class Character(): # character
 
     def equip(self, item:Equipment):
         if not item.equipped:
+            found = False
             for obj in self.inventory:
                 if isinstance(obj, Equipment):
                     if isinstance(obj, item.__class__.__base__):
-                        if isinstance(obj, item.__class__):
+                        if isinstance(obj, item.__class__) and not found:
                             if obj.equipped:
                                 obj.equipped = False
                                 for key in item.stats:
@@ -100,6 +101,7 @@ class Character(): # character
                                         self.stats[key][0] -= item.stats[key][0]
                                         self.stats[key][1] -= item.stats[key][1]
                             item.equipped = True
+                            found = True
                             for key in item.stats:
                                 if isinstance(self.stats[key], int):
                                     self.stats[key] += item.stats[key]
