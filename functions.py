@@ -94,8 +94,7 @@ def bossPassive(i:int, boss:EnemyBoss, args:list, hero):
                     sortArgs = sorted(args, key=lambda enemy: enemy.stats["HP"][0])
                     if args[0].stats["HP"][0] <= 20:
                         boss.darkNova(args)
-
-        
+       
 def checkHero(eroe:Character) -> bool:
     if isinstance(eroe, Hero):
         return True
