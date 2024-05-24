@@ -4,11 +4,13 @@ from inventario import *
 from functions import *
 
 def begin(hero:Hero):
-    lvlMax = 3
+    lvlMax = 7
     END = False
     while not hero.dead and not END:        
         # livelli da 1 a 7
         for livello in range(1,lvlMax+1):
+            if END:
+                break
             # ultimo encounter dello stage = boss fight
             boss = False
             print(f"STAGE {livello}".center(60, "-"))
@@ -29,6 +31,14 @@ def begin(hero:Hero):
                 orderOfAction = sorted([hero]+nem, key=lambda character: character.stats[agi], reverse=True)
                 while nem and not hero.dead:
                     for persona in orderOfAction:
+                        #REMOVE
+                        hero.stats =   {"HP":[1000,1000],
+                                        "MANA":[1000,1000], 
+                                        "STR":1000,
+                                        "CON":1000, 
+                                        "AGI":1000,
+                                        "INT":1000}
+                        #REMOVE
                         # turno eroe
                         if checkHero(persona) and not persona.dead:
                             # turno eroe
@@ -51,10 +61,15 @@ def begin(hero:Hero):
                                 hero.gold += persona.gold
 
                     print("-"*60)
-                    hero.levelUp()
+
+                    if hasFinalItem(hero):
+                        END = True
+                        break
+                    else:
+                        hero.levelUp()
                 else:
                     break
-            if not hero.dead:
+            if not hero.dead and not END:
                 if livello < lvlMax: # dovrà essere 7
                     if livello > 1:
                         shop = createShop(livello, shop)

@@ -31,6 +31,14 @@ class Armor(Equipment):
     def __init__(self) -> None:
         super().__init__()
 
+class Boots(Equipment):
+    def __init__(self) -> None:
+        super().__init__()
+
+class Gloves(Equipment):
+    def __init__(self) -> None:
+        super().__init__()
+
 class Helmet(Equipment):
     def __init__(self) -> None:
         super().__init__()
@@ -137,7 +145,37 @@ class KoboldEar(Drop):
         self.name = "Kobold Ear"
         self.cost = 8
 
-# equipments
+class OrcTooth(Drop):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Orc Tooth"
+        self.cost = 12
+
+class DemonHorn(Drop):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Demon Horn"
+        self.cost = 15
+        
+class DarkGem(Drop):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Dark Gem"
+        self.cost = 25      
+
+class DragonScale(Drop):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Dragon Scale"
+        self.cost = 35  
+
+class DragonHeart(Drop):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Dragon Heart"
+        self.cost = 45  
+
+# boss equipments
 class SlimeCrown(Helmet):
     def __init__(self) -> None:
         super().__init__()
@@ -154,7 +192,7 @@ class GoblinRing(Ring):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Goblin Gem"
-        self.cost = 10
+        self.cost = 15
         self.stats = {"HP":[10,10],
                       "MANA":[0,0],
                       "STR":5,
@@ -174,6 +212,47 @@ class KoboldAmulet(Necklace):
                       "AGI":2, 
                       "INT":2}
 
+class WarlordShield(Shield):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Warlord Shield"
+        self.cost = 25
+        self.stats = {"HP":[25,25],
+                      "MANA":[0,0],
+                      "STR":6,
+                      "CON":8, 
+                      "AGI":0, 
+                      "INT":0}
+    
+class InfernalRobe(Armor):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Infernal Robe"
+        self.cost = 30
+        self.stats = {"HP":[5,5],
+                      "MANA":[30,30],
+                      "STR":0,
+                      "CON":2, 
+                      "AGI":2, 
+                      "INT":8}
+
+class DragonClaws(Gloves):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Dragon Claws"
+        self.cost = 35
+        self.stats = {"HP":[5,5],
+                      "MANA":[5,5],
+                      "STR":2,
+                      "CON":2, 
+                      "AGI":2, 
+                      "INT":2}
+
+class DarkLordCrown(Item):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Dark Lord Crown"
+
 class HeroSword(Sword):
     def __init__(self) -> None:
         super().__init__()
@@ -186,6 +265,7 @@ class HeroSword(Sword):
                       "AGI":5, 
                       "INT":0}
         
+# mob equipments        
 class SmallShield(Shield):
     def __init__(self) -> None:
         super().__init__()
@@ -195,17 +275,5 @@ class SmallShield(Shield):
                       "MANA":[0,0],
                       "STR":0,
                       "CON":3, 
-                      "AGI":0, 
-                      "INT":0}
-
-class LegendaryShield(Shield):
-    def __init__(self) -> None:
-        super().__init__()
-        self.name = "Legendary Shield"
-        self.cost = 15000
-        self.stats = {"HP":[500,500],
-                      "MANA":[0,0],
-                      "STR":0,
-                      "CON":300, 
                       "AGI":0, 
                       "INT":0}

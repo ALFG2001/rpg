@@ -35,7 +35,6 @@ def kindOfBoss(boss:EnemyBoss) -> int:
         return 2
     if isinstance(boss, KoboldHighShaman):
         return 3
-    """
     if isinstance(boss, OrcWarlord):
         return 4
     if isinstance(boss, DemonPrince):
@@ -44,9 +43,8 @@ def kindOfBoss(boss:EnemyBoss) -> int:
         return 6
     if isinstance(boss, DarkLord):
         return 7
-    """
 
-def bossPassive(i:int, boss:EnemyBoss, args:list):
+def bossPassive(i:int, boss:EnemyBoss, args:list, hero):
     match i:    #PASSIVE BOSS
         case 1:
             if boss.dead:
@@ -64,19 +62,39 @@ def bossPassive(i:int, boss:EnemyBoss, args:list):
                 boss.berserker()
             checkDead(args)
         case 3:
-            print()
-            print("THE KOBOLD HIGH SHAMAN USES NECROMANCY".center(60))
-            print("-"*60)
-            boss.reviveAllies(args)
+            if any(not enemy.dead for enemy in args if enemy != boss) and boss.dead:
+                print()
+                print("THE KOBOLD HIGH SHAMAN RESURRECTS THROUGH NECROMANCY".center(60))
+                print("-"*60)
+                boss.sacrificeAllies(args)
             checkDead(args)
         case 4:
-            pass
+            if not boss.dead:
+                print()
+                print("THE ORC WARLORD BUFFS HIS ALLIES".center(60))
+                print("-"*60)
+                boss.warCry(args)
         case 5:
-            pass
+            if boss.buffsleft and not boss.dead:
+                print()
+                print("THE DEMON PRINCE BUFFS HIMSELF".center(60))
+                print("-"*60)
+                boss.infernalRage(args)
         case 6:
-            pass
+            if boss.buffsleft and boss.roarCounter % 2 and not boss.dead:
+                print()
+                print("THE TYRANT'S ROAR WEAKENS YOU".center(60))
+                print("-"*60)
+                boss.dragonRoar(args, hero)
+            else:
+                boss.roarCounter += 1
         case 7:
-            pass
+            if not boss.dead:
+                if len(args) > 1:
+                    sortArgs = sorted(args, key=lambda enemy: enemy.stats["HP"][0])
+                    if args[0].stats["HP"][0] <= 20:
+                        boss.darkNova(args)
+
         
 def checkHero(eroe:Character) -> bool:
     if isinstance(eroe, Hero):
@@ -138,7 +156,7 @@ def meleeAttack(hero:Hero, nem:list, numeri_bersaglio:list, order:list):
         if checkBoss(nem[bersaglio-1]):
             boss = nem[bersaglio-1]
             b = kindOfBoss(boss)
-            bossPassive(b, boss, nem)
+            bossPassive(b, boss, nem, hero)
             for nemici in nem:
                 if nemici not in order:
                     order.append(nemici)
@@ -195,7 +213,7 @@ def spellAttack(hero:Hero, nem:list, numeri_bersaglio:list, order:list):
                         if checkBoss(nem[bersaglio-1]):
                             boss = nem[bersaglio-1]
                             b = kindOfBoss(boss)
-                            bossPassive(b, boss, nem)
+                            bossPassive(b, boss, nem, hero)
                             for nemici in nem:
                                 if nemici not in order:
                                     order.append(nemici)
@@ -316,7 +334,7 @@ def useItem(hero: Hero, nem: list, numeri_bersaglio: list, order: list):
                 if checkBoss(nem[bersaglio - 1]):
                     boss = nem[bersaglio - 1]
                     b = kindOfBoss(boss)
-                    bossPassive(b, boss, nem)
+                    bossPassive(b, boss, nem, hero)
                     for nemici in nem:
                         if nemici not in order:
                             order.append(nemici)
@@ -395,11 +413,17 @@ def turnoNemico(hero:Hero, persona:Character, nem:list):
                     if availableMana >= availableSpells[i].cost:
                         if isinstance(availableSpells[i], Healing):
                             sortNem = sorted(nem, key=lambda enemy:enemy.stats["HP"][1]-enemy.stats["HP"][0], reverse=True)
+                            for enemy in sortNem:
+                                if enemy.dead:
+                                    sortNem.remove(enemy)
                             if  sortNem[0].stats["HP"][1]-sortNem[0].stats["HP"][0] >= availableSpells[i].heal:
                                     persona.castSpell(availableSpells[i], sortNem[0])
+                                    casted = True
+                            else:
+                                i += 1
                         else:
                             persona.castSpell(availableSpells[i], hero)
-                        casted = True
+                            casted = True
                     else:
                         i += 1
                 # se non casta spell attacca
@@ -642,3 +666,6 @@ def createShop(stage:int, shop=[]) -> list:
             shop.append(ConstitutionPotion())
             shop.append(IntelligencePotion())
     return shop
+
+def hasFinalItem(hero:Hero) -> bool:
+        return any(isinstance(item, DarkLordCrown) for item in hero.inventory)

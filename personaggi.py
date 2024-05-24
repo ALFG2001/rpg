@@ -74,7 +74,7 @@ class Character(): # character
         else:
             target.stats["HP"][0] += heal
         print(f"{self.name} heals {target.name} for {heal} HP")
-        print(f"Current HP: {self.stats["HP"][0]}")
+        print(f"Current HP: {target.stats['HP'][0]}")
 
     def healPotion(self, item:Utility):
         for key in item.stats:
@@ -213,7 +213,7 @@ class GoblinShaman(EnemyMob):
         self.name = "Goblin Shaman"
         self.stats = {"HP":[12,12], "MANA":[15,15], "STR":2, "CON":4, "AGI":3, "INT":5}
         self.inventory = [GoblinEar()]
-        self.spells = [FireBolt(), LightingStrike()]
+        self.spells = [FireBolt(), LightningStrike()]
         self.gold = 30
 
 class KoboldScout(EnemyMob):
@@ -241,67 +241,127 @@ class KoboldShaman(EnemyMob):
         self.inventory = [KoboldEar(), HealingHerb()]
         self.gold = 35
 
-"""
-class Orc1(EnemyMob):
+class OrcGrunt(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Orc Grunt"
+        self.stats = {"HP": [20, 20], "MANA": [0, 0], "STR": 8, "CON": 6, "AGI": 3, "INT": 2}
+        self.inventory = [OrcTooth()]
+        self.gold = 20
 
-class Orc2(EnemyMob):
+class OrcWarrior(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Orc Warrior"
+        self.stats = {"HP": [25, 25], "MANA": [0, 0], "STR": 10, "CON": 8, "AGI": 4, "INT": 3}
+        #self.inventory = [OrcTooth(), SmallAxe()]
+        self.gold = 25
 
-class Orc3(EnemyMob):
+class OrcShaman(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Orc Shaman"
+        self.stats = {"HP": [22, 22], "MANA": [20, 20], "STR": 5, "CON": 5, "AGI": 4, "INT": 7}
+        self.spells = [FireBolt(), HealingLight()]
+        self.inventory = [OrcTooth(), HealingHerb()]
+        self.gold = 25
 
-class Orc4(EnemyMob):
+class OrcCommander(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Orc Commander"
+        self.stats = {"HP": [30, 30], "MANA": [10, 10], "STR": 12, "CON": 10, "AGI": 5, "INT": 4}
+        #self.inventory = [OrcTooth(), CommandersHelmet()]
+        self.gold = 30
 
-class Demon1(EnemyMob):
+class Imp(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Imp"
+        self.stats = {"HP": [10, 10], "MANA": [10, 10], "STR": 4, "CON": 3, "AGI": 6, "INT": 4}
+        #self.inventory = [ImpClaw()]
+        self.gold = 10
 
-class Demon2(EnemyMob):
+class LesserDemon(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Lesser Demon"
+        self.stats = {"HP": [20, 20], "MANA": [20, 20], "STR": 8, "CON": 6, "AGI": 5, "INT": 6}
+        self.inventory = [DemonHorn()]
+        self.gold = 20
 
-class Demon3(EnemyMob):
+class DemonWarrior(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Demon Warrior"
+        self.stats = {"HP": [25, 25], "MANA": [15, 15], "STR": 10, "CON": 8, "AGI": 6, "INT": 5}
+        #self.inventory = [DemonHorn(), DemonSword()]
+        self.gold = 25
 
-class Demon4(EnemyMob):
+class DemonMage(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Demon Mage"
+        self.stats = {"HP": [22, 22], "MANA": [30, 30], "STR": 5, "CON": 5, "AGI": 5, "INT": 9}
+        self.spells = [DarkFlame(), ShadowBolt()]
+        #self.inventory = [DemonHorn(), MagicGem()]
+        self.gold = 25
 
-class Demon5(EnemyMob):
+class DemonGeneral(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Demon General"
+        self.stats = {"HP": [30, 30], "MANA": [20, 20], "STR": 12, "CON": 10, "AGI": 7, "INT": 7}
+        #self.inventory = [DemonHorn(), GeneralArmor()]
+        self.gold = 30
 
-class Dragon1(EnemyMob):
+class DragonWhelp(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Dragon Whelp"
+        self.stats = {"HP": [30, 30], "MANA": [20, 20], "STR": 8, "CON": 6, "AGI": 4, "INT": 5}
+        self.inventory = [DragonScale()]
+        self.gold = 20
 
-class Dragon2(EnemyMob):
+class DragonHatchling(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Dragon Hatchling"
+        self.stats = {"HP": [40, 40], "MANA": [30, 30], "STR": 10, "CON": 8, "AGI": 6, "INT": 6}
+        #self.inventory = [DragonScale(), DragonClaw()]
+        self.gold = 30
 
-class Dragon3(EnemyMob):
+class YoungDragon(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Young Dragon"
+        self.stats = {"HP": [50, 50], "MANA": [40, 40], "STR": 12, "CON": 10, "AGI": 8, "INT": 7}
+        #self.inventory = [DragonScale(), DragonClaw(), DragonTooth()]
+        self.gold = 40
 
-class Dragon4(EnemyMob):
+class DragonWarrior(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Dragon Warrior"
+        self.stats = {"HP": [60, 60], "MANA": [50, 50], "STR": 14, "CON": 12, "AGI": 9, "INT": 8}
+        #self.inventory = [DragonScale(), DragonSword()]
+        self.gold = 50
 
-class Dragon5(EnemyMob):
+class ElderDragon(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
+        self.name = "Elder Dragon"
+        self.stats = {"HP": [80, 80], "MANA": [60, 60], "STR": 16, "CON": 14, "AGI": 10, "INT": 10}
+        #self.inventory = [DragonScale(), DragonClaw(), DragonTooth()]
+        self.gold = 60
 
-class Dragon6(EnemyMob):
+class DragonGuardian(EnemyMob):
     def __init__(self) -> None:
         super().__init__()
-"""
+        self.name = "Dragon Guardian"
+        self.stats = {"HP": [100, 100], "MANA": [80, 80], "STR": 18, "CON": 16, "AGI": 12, "INT": 12}
+        #self.inventory = [DragonScale(), DragonClaw(), DragonTooth(), DragonShield()]
+        self.gold = 70
 
 class EnemyBoss(Character): # enemy boss
     def __init__(self) -> None:
@@ -324,7 +384,7 @@ class SlimeKing(EnemyBoss):
 class GoblinLord(EnemyBoss):
     def __init__(self) -> None:
         super().__init__()
-        self.stats = {"NAME":"Slime King","HP":[50,50], "MANA":[0,0], "STR":6, "CON":4, "AGI":5, "INT":6}
+        self.stats = {"NAME":"Goblin Lord","HP":[50,50], "MANA":[0,0], "STR":6, "CON":4, "AGI":5, "INT":6}
         self.inventory = [GoblinEar(), GoblinEar(), GoblinRing()]
         self.bers = False
         self.gold = 100
@@ -340,39 +400,88 @@ class KoboldHighShaman(EnemyBoss):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Kobold High Shaman"
-        self.stats = {"HP":[50,50], "MANA":[30,30], "STR":4, "CON":5, "AGI":4, "INT":8}
-        self.spells = [FireBolt(), LightingStrike(), HealingWave()]
+        self.stats = {"HP": [60, 60], "MANA": [30, 30], "STR": 4, "CON": 5, "AGI": 4, "INT": 8}
+        self.spells = [FireBolt(), LightningStrike()]
         self.inventory = [KoboldEar(), KoboldAmulet(), HealingHerb(), MagicScroll()]
         self.gold = 150
 
-    def reviveAllies(self, allies):
-        if self.dead:
+    def sacrificeAllies(self, allies):
+        if self.dead and allies:
             for ally in allies:
-                if ally.dead:
-                    ally.stats["HP"][0] = ally.stats["HP"][1] // 2  # revive with half HP
-                    ally.dead = False
-                    print(f"{ally.name} is revived by {self.name}!")
+                if not ally.dead:
+                    self.stats["HP"][0] = self.stats["HP"][1] // 2  # revive with half HP
+                    ally.dead = True
+                    print(f"{ally.name} has been sacrificed!".center(60))
+                    self.dead = False
+                    break
 
-"""
 class OrcWarlord(EnemyBoss):
     def __init__(self) -> None:
         super().__init__()
-        self.stats = {"NAME":"Slime King","HP":[30,30], "MANA":[0,0], "STR":15, "CON":15, "AGI":5, "INT":2}
+        self.name = "Orc Warlord"
+        self.stats = {"HP": [80, 80], "MANA": [10, 10], "STR": 15, "CON": 12, "AGI": 6, "INT": 3}
+        self.inventory = [OrcTooth(), WarlordShield()]
+        self.gold = 200
+
+    def warCry(self, allies):
+        if not self.dead:
+            for ally in allies:
+                ally.stats["STR"] += 2
+                ally.stats["CON"] += 2
 
 class DemonPrince(EnemyBoss):
     def __init__(self) -> None:
         super().__init__()
-        self.stats = {"NAME":"Slime King","HP":[30,30], "MANA":[0,0], "STR":15, "CON":15, "AGI":5, "INT":2}
+        self.name = "Demon Prince"
+        self.stats = {"HP": [100, 100], "MANA": [50, 50], "STR": 18, "CON": 14, "AGI": 8, "INT": 10}
+        self.spells = [DarkFlame(), ShadowBolt()]
+        self.inventory = [DemonHorn(), InfernalRobe(), DarkGem()]
+        self.gold = 300
+        self.buffsleft = 3
+
+    def infernalRage(self):
+        self.buffsleft -= 1
+        if not self.dead:
+            self.stats["STR"] += 5
+            self.stats["INT"] += 5
 
 class DragonTyrant(EnemyBoss):
     def __init__(self) -> None:
         super().__init__()
-        self.stats = {"NAME":"Slime King","HP":[30,30], "MANA":[0,0], "STR":15, "CON":15, "AGI":5, "INT":2}
+        self.name = "Dragon Tyrant"
+        self.stats = {"HP": [150, 150], "MANA": [80, 80], "STR": 20, "CON": 18, "AGI": 10, "INT": 12}
+        self.spells = [FireBreath()]
+        self.inventory = [DragonScale(), DragonClaws(), DragonHeart()]
+        self.gold = 500
+        self.roarCounter = 1
+
+    def dragonRoar(self, enemy):
+        if not self.dead:
+                enemy.stats["STR"] -= 2
+                enemy.stats["CON"] -= 2
+                enemy.stats["AGI"] -= 2
+                enemy.stats["INT"] -= 2
+                self.roarCounter += 1
 
 class DarkLord(EnemyBoss):
     def __init__(self) -> None:
         super().__init__()
-"""
+        self.name = "Dark Lord"
+        self.stats = {"HP": [200, 200], "MANA": [100, 100], "STR": 25, "CON": 20, "AGI": 12, "INT": 15}
+        self.spells = [DeathCurse(), SoulDrain()]
+        self.inventory = [DarkLordCrown()]
+
+
+    def darkNova(self, enemies):
+        if not self.dead:
+            for enemy in enemies:
+                enemy.stats["HP"][0] -= 20  # Deal flat damage to all mobs
+                if enemy.dead:
+                    self.stats["HP"][0] = min(self.stats["HP"][1], self.stats["HP"][0]+10)
+                    self.stats["STR"] += 2
+                    self.stats["CON"] += 2
+                    self.stats["AGI"] += 2
+                    self.stats["INT"] += 2
 
 def dungeon(num:int) -> list:
     match num:
