@@ -23,14 +23,14 @@ class Smite(Damaging):
         super().__init__()
         self.name = "Smite"
         self.cost = 10
-        self.damage = 2
+        self.damage = 3.5
 
 class PoisonBall(Damaging):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Poison Ball"
         self.cost = 5
-        self.damage = 3
+        self.damage = 5.5
 
 class FireBolt(Damaging):
     def __init__(self) -> None:

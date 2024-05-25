@@ -40,7 +40,15 @@ class Character(): # character
         self.stats = self.stats_base
 
     def attack(self, target):
-        damage = max(0, self.stats["STR"] - round(target.stats["CON"] ** 0.5))
+        if isinstance(self, Hero):
+            STR_MULTIPLIER = 0.9
+        else:
+            STR_MULTIPLIER = 1.35
+        CON_RESISTANCE = 0.75
+
+        damage = max(0, (self.stats["STR"] * STR_MULTIPLIER) - (target.stats["CON"] * CON_RESISTANCE))
+        damage = round(damage)
+        
         print(f"{self.name} attacks {target.name} for {damage} damage")
         self.apply_damage(target, damage)
 
@@ -50,8 +58,17 @@ class Character(): # character
             return
 
         self.stats["MANA"][0] -= spell.cost
+
         if isinstance(spell, Damaging):
-            damage = max(0, spell.damage * self.stats["INT"] - round(target.stats["CON"] ** 0.3))
+            if isinstance(self, Hero):
+                INT_MULTIPLIER = 0.75
+            else:
+                INT_MULTIPLIER = 1.1
+            CON_RESISTANCE = 0.5
+            
+            damage = max(0, (spell.damage * self.stats["INT"] * INT_MULTIPLIER) - (target.stats["CON"] * CON_RESISTANCE))
+            damage = round(damage)
+
             print(f"{self.name} casts {spell.name} on {target.name} for {damage} damage")
             self.apply_damage(target, damage)
 
