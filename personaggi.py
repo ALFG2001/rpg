@@ -73,7 +73,7 @@ class Character(): # character
             self.apply_damage(target, damage)
 
         elif isinstance(spell, Healing):
-            heal = spell.heal + self.stats["INT"]
+            heal = spell.heal + self.stats["INT"]*1.5
             self.apply_healing(target, heal)
               
     def apply_damage(self, target, damage):
