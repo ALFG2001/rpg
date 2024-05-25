@@ -131,8 +131,11 @@ def printInventario(lista:list):
         print(item[0],*s)
 
 def sortUniqueList(listaOriginale:list) -> list:
-    dict_listaOriginale = {it.name:it for it in listaOriginale}
-    sorted_keys = sorted(dict_listaOriginale.keys(), key=lambda key: listaOriginale.index(dict_listaOriginale[key]))
+    dict_listaOriginale = {}
+    for it in listaOriginale:
+        if it.name not in dict_listaOriginale:
+            dict_listaOriginale[it.name] = it
+    sorted_keys = sorted(dict_listaOriginale.keys(), key=lambda k: listaOriginale.index(dict_listaOriginale[k]))
     sorted_unique = []
     for k in sorted_keys:
         sorted_unique.append(dict_listaOriginale[k])
@@ -242,7 +245,6 @@ def useItem(hero: Hero, nem: list, numeri_bersaglio: list, order: list):
     i = 1
     d_uti = {}
     d_harm = {}
-
     for item in hero.inventory:
         # Take only utility items
         if isinstance(item, Utility):
@@ -340,6 +342,7 @@ def useItem(hero: Hero, nem: list, numeri_bersaglio: list, order: list):
                     order = sorted(order, key=lambda character: character.stats["AGI"], reverse=True)
                 elif nem[bersaglio - 1].dead:
                     checkDead(nem)
+        
                 hero.hasAttacked = True
             else:
                 print("-" * 60)

@@ -31,6 +31,7 @@ def begin(hero:Hero):
                 orderOfAction = sorted([hero]+nem, key=lambda character: character.stats[agi], reverse=True)
                 while nem and not hero.dead:
                     for persona in orderOfAction:
+                        #hero.stats = {"HP":[9999,9999], "MANA":[9999,9999], "STR":9999, "CON":9999, "AGI":9999, "INT":9999}
                         # turno eroe
                         if checkHero(persona) and not persona.dead:
                             # turno eroe

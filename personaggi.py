@@ -86,6 +86,7 @@ class Character(): # character
                 print(f"{key} increased by {diff-self.stats[key][0]}")
                 self.stats[key][0] =  diff
                 print(f"Current {key}: {self.stats[key][0]}")
+        self.inventory.remove(item)
                 
     def harmPotion(self, item:Harmful, target):
         danno = item.damage
